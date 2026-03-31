@@ -9,9 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&family=Fira+Code:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Outfit:wght@500;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
@@ -19,6 +17,10 @@
 </head>
 
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
     <nav class="navbar" id="navbar">
         <div class="nav-content">
             <a href="#" class="logo">AS<span>.</span></a>
@@ -28,6 +30,10 @@
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#skills">Skills</a></li>
             </ul>
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
     </nav>
 
@@ -38,7 +44,9 @@
             <div class="hero-content hidden-fade-up">
                 <p class="greeting">Hi, my name is</p>
                 <h1 class="name">Akhil Shukla.</h1>
-                <h2 class="title">I build intelligent data solutions.</h2>
+                <div class="typewriter-container">
+                    <h2 class="title typewriter">I build intelligent data solutions.</h2>
+                </div>
                 <p class="summary">
                     Data Scientist III at Walmart Global Tech. Kaggle Expert & IIT Kanpur Alumnus.<br>
                     Specializing in advanced analytics, agentic AI frameworks, and end-to-end forecasting pipelines.
@@ -64,12 +72,15 @@
 
         <!-- Experience Section -->
         <section class="experience section" id="experience">
+            <!-- Parallax Background Text -->
+            <div class="parallax-bg-text" id="parallax-text">EXPERIENCE</div>
+
             <h2 class="section-title hidden-fade-up">Where I've Worked</h2>
 
             <div class="timeline">
                 <div class="timeline-item hidden-fade-up">
                     <div class="timeline-dot"></div>
-                    <div class="timeline-content card">
+                    <div class="timeline-content card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
                         <h3>Data Scientist III <span>@ Walmart Global Tech</span></h3>
                         <p class="date">Aug 2024 - Present</p>
                         <ul class="duties">
@@ -85,7 +96,7 @@
 
                 <div class="timeline-item hidden-fade-up">
                     <div class="timeline-dot"></div>
-                    <div class="timeline-content card">
+                    <div class="timeline-content card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
                         <h3>Analyst II <span>@ Walmart Global Tech</span></h3>
                         <p class="date">Jun 2022 - Aug 2024</p>
                         <ul class="duties">
@@ -106,7 +117,7 @@
             <h2 class="section-title hidden-fade-up">Selected Projects</h2>
             <div class="project-grid">
 
-                <div class="project-card hidden-fade-up">
+                <div class="project-card hidden-fade-up" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
                     <div class="project-header">
                         <i class="fas fa-folder-open icon"></i>
                         <div class="project-links">
@@ -127,7 +138,7 @@
                     </ul>
                 </div>
 
-                <div class="project-card hidden-fade-up" style="transition-delay: 0.1s;">
+                <div class="project-card hidden-fade-up" style="transition-delay: 0.1s;" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
                     <div class="project-header">
                         <i class="fas fa-chart-line icon"></i>
                     </div>
@@ -141,7 +152,7 @@
                     </ul>
                 </div>
 
-                <div class="project-card hidden-fade-up" style="transition-delay: 0.2s;">
+                <div class="project-card hidden-fade-up" style="transition-delay: 0.2s;" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
                     <div class="project-header">
                         <i class="fas fa-trophy icon"></i>
                         <div class="project-links">
@@ -207,7 +218,7 @@
         <!-- About / Education -->
         <section class="education section" id="about">
             <h2 class="section-title hidden-fade-up">Education</h2>
-            <div class="edu-card card hidden-fade-up">
+            <div class="edu-card card hidden-fade-up" data-tilt data-tilt-max="3" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.05">
                 <div class="edu-header">
                     <h3>Indian Institute of Technology Kanpur</h3>
                     <span class="date">Class of 2022</span>
@@ -224,6 +235,17 @@
                 </ul>
             </div>
         </section>
+
+        <!-- Easter Egg Data Visualization -->
+        <section class="easter-egg section">
+            <div class="easter-content hidden-fade-up">
+                <h3>Predictive Distribution Pattern</h3>
+                <p>Hover over the chart to interact with the underlying function simulation.</p>
+                <div class="canvas-container">
+                    <canvas id="easterEggCanvas"></canvas>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -238,6 +260,8 @@
         </div>
     </footer>
 
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script src="js/script.js"></script>
 </body>
 
