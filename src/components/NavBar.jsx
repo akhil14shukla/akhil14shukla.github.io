@@ -1,35 +1,41 @@
 import { motion } from 'framer-motion';
-import { CLUSTERS } from '../data/portfolio';
+import { STATIONS } from '../data/portfolio';
 import { useStore } from '../store';
+import { scrollToProgress } from '../hooks/useLenis';
+import { wind, spawnGust } from '../three/wind';
 
-// Bottom nav = the query bar. Each chip selects a topic: the snow attends to it
-// and the content panel swaps in place. Re-clicking the active chip returns home.
-const ITEMS = [
-  { id: null, label: 'Home' },
-  ...CLUSTERS.map((c) => ({ id: c.id, label: c.label })),
-  { id: 'experience', label: 'Experience' },
-  { id: 'education', label: 'Education' },
-];
+// Bottom nav — each chip jumps the camera to a station along the journey and
+// sends a guiding gust through the field. Active chip tracks scroll progress.
+const ITEMS = STATIONS.filter((s) => s.kind !== 'cta');
 
 export default function NavBar() {
-  const selectedTopic = useStore((s) => s.selectedTopic);
-  const selectTopic = useStore((s) => s.selectTopic);
+  const progress = useStore((s) => s.progress);
+  // nearest station to current progress = active
+  let active = ITEMS[0].id;
+  let best = 1;
+  for (const s of ITEMS) {
+    const d = Math.abs(progress - s.p);
+    if (d < best) { best = d; active = s.id; }
+  }
 
   return (
     <motion.nav
       className="navbar"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <span className="navbar-label">follow&nbsp;the&nbsp;wind</span>
-      {ITEMS.map((it) => (
+      <span className="navbar-label">ride&nbsp;the&nbsp;wind</span>
+      {ITEMS.map((s) => (
         <button
-          key={it.label}
-          className={'chip' + (selectedTopic === it.id ? ' active' : '')}
-          onClick={() => selectTopic(it.id)}
+          key={s.id}
+          className={'chip' + (active === s.id ? ' active' : '')}
+          onClick={() => {
+            scrollToProgress(s.p);
+            spawnGust(wind.cursorX, wind.cursorZ);
+          }}
         >
-          {it.label}
+          {s.label.split(' & ')[0]}
         </button>
       ))}
     </motion.nav>

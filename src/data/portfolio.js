@@ -85,6 +85,19 @@ export const CLUSTERS = [
   },
 ];
 
+// Stations along the scroll journey — each occupies a slice of progress (0..1).
+// The camera flies between them; the matching panel reveals at its centre.
+export const STATIONS = [
+  { id: 'home', label: 'Home', p: 0.0, kind: 'home' },
+  { id: 'forecasting', label: 'Forecasting & Time-Series', p: 0.16, kind: 'cluster' },
+  { id: 'competitive', label: 'Competitive ML & Open-Source', p: 0.31, kind: 'cluster' },
+  { id: 'analytics', label: 'Analytics & Insights', p: 0.46, kind: 'cluster' },
+  { id: 'projects', label: 'Projects & Tooling', p: 0.61, kind: 'cluster' },
+  { id: 'experience', label: 'Experience', p: 0.76, kind: 'experience' },
+  { id: 'education', label: 'Education', p: 0.88, kind: 'education' },
+  { id: 'connect', label: 'Connect', p: 0.99, kind: 'cta' },
+];
+
 // Queries the visitor can fire. weights = relevance over clusters (softmax-able).
 export const QUERIES = [
   { q: 'What can you build?', weights: { forecasting: 0.9, analytics: 0.8, competitive: 0.7, projects: 0.7 } },
