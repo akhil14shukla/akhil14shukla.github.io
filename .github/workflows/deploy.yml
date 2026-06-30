@@ -1,9 +1,9 @@
 name: Deploy to GitHub Pages
 
+# Disabled until GitHub Actions billing is active.
+# See DEPLOY.md for alternatives (gh-pages branch or Cloudflare/Netlify/Vercel).
 on:
-  push:
-    branches: [master]
-  workflow_dispatch:
+  workflow_dispatch:  # manual trigger only; remove push trigger to avoid billing errors
 
 permissions:
   contents: read
