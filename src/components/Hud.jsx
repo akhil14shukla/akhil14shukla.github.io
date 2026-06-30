@@ -4,28 +4,26 @@ import { CLUSTERS, VERDICTS } from '../data/portfolio';
 
 const NHEAD = 8;
 
+// A live "activation probe" — pure ambience that reacts to the current
+// selection (relevance) and how much of the field has been explored.
 export default function Hud() {
   const relevance = useStore((s) => s.relevance);
-  const activeCluster = useStore((s) => s.activeCluster);
-  const visited = useStore((s) => s.visited);
+  const selectedTopic = useStore((s) => s.selectedTopic);
   const explorationPct = useStore((s) => s.explorationPct);
-  const temperature = useStore((s) => s.temperature);
-  const setTemperature = useStore((s) => s.setTemperature);
 
   const [block, setBlock] = useState(1);
   const [norm, setNorm] = useState(0.4);
   const [heads, setHeads] = useState(new Array(NHEAD).fill(0.15));
   const raf = useRef();
 
-  // The forward pass is always running: animate block playhead, residual norm, heads.
   useEffect(() => {
-    let t0 = performance.now();
+    const t0 = performance.now();
     const tick = (now) => {
       const t = (now - t0) / 1000;
       setBlock(1 + Math.floor((t * 0.9) % 6));
-      const maxRel = Math.max(0, ...Object.values(useStore.getState().relevance));
-      setNorm(0.35 + 0.4 * (0.5 + 0.5 * Math.sin(t * 1.3)) + maxRel * 0.25);
       const rel = useStore.getState().relevance;
+      const maxRel = Math.max(0, ...Object.values(rel));
+      setNorm(0.35 + 0.4 * (0.5 + 0.5 * Math.sin(t * 1.3)) + maxRel * 0.25);
       const relArr = CLUSTERS.map((c) => rel[c.id] ?? 0);
       setHeads(
         Array.from({ length: NHEAD }, (_, h) => {
@@ -41,10 +39,13 @@ export default function Hud() {
 
   const pct = explorationPct();
   const fired = pct >= 100;
-  // softmax verdict: more exploration → higher-commitment token
-  const verdict = VERDICTS[Math.min(VERDICTS.length - 1, Math.floor((pct / 100) * VERDICTS.length))] || VERDICTS[0];
-  const conf = Math.round(Math.min(99, 40 + pct * 0.55 + (Object.values(relevance).length ? Math.max(...Object.values(relevance)) * 15 : 0)));
+  const verdict =
+    VERDICTS[Math.min(VERDICTS.length - 1, Math.floor((pct / 100) * VERDICTS.length))] || VERDICTS[0];
+  const conf = Math.round(
+    Math.min(99, 40 + pct * 0.55 + (Object.values(relevance).length ? Math.max(...Object.values(relevance)) * 15 : 0))
+  );
   const headMax = Math.max(...heads) || 1;
+  const label = CLUSTERS.find((c) => c.id === selectedTopic)?.label || '—';
 
   return (
     <div className="hud" aria-hidden="true">
@@ -76,29 +77,18 @@ export default function Hud() {
       </div>
 
       <div className="meter">
-        <div className="row"><span>retrieved · {activeCluster ? CLUSTERS.find((c) => c.id === activeCluster)?.label : '—'}</span><b>{conf}%</b></div>
+        <div className="row"><span>attending · {label}</span><b>{conf}%</b></div>
         <div className="bar"><i style={{ width: `${conf}%` }} /></div>
       </div>
 
       <div className="meter">
-        <div className="row"><span>latent space explored</span><b>{pct}%</b></div>
+        <div className="row"><span>field explored</span><b>{pct}%</b></div>
         <div className="bar"><i style={{ width: `${pct}%`, background: pct >= 100 ? 'var(--gold)' : undefined }} /></div>
       </div>
 
       <div className={'verdict' + (fired ? ' fired' : '')}>
         <span>{fired ? 'output · argmax' : 'output · softmax'}</span>
         <b>{fired ? `“${verdict.token}” ✓` : '…'}</b>
-      </div>
-
-      <div className="temp">
-        <div className="row" style={{ fontSize: '0.6rem', display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-          <span>temperature</span><b style={{ color: 'var(--gold)' }}>{temperature.toFixed(2)}</b>
-        </div>
-        <input
-          type="range" min="0.4" max="2" step="0.05" value={temperature}
-          onChange={(e) => setTemperature(parseFloat(e.target.value))}
-          aria-label="sampling temperature"
-        />
       </div>
     </div>
   );

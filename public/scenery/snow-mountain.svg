@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0C0D14" stop-opacity="0"/>
+      <stop offset="0.55" stop-color="#141528" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#1a1b30" stop-opacity="0.9"/>
+    </linearGradient>
+    <radialGradient id="moon" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#F4ECD8"/>
+      <stop offset="0.7" stop-color="#E9DcBd"/>
+      <stop offset="1" stop-color="#E9DcBd" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="peakFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3354"/>
+      <stop offset="1" stop-color="#1d2440"/>
+    </linearGradient>
+    <linearGradient id="peakMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#262d49"/>
+      <stop offset="1" stop-color="#191f37"/>
+    </linearGradient>
+    <linearGradient id="peakNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2138"/>
+      <stop offset="1" stop-color="#11152639"/>
+    </linearGradient>
+  </defs>
+
+  <!-- faint sky wash so the canvas sky reads behind the upper area -->
+  <rect x="0" y="0" width="1600" height="900" fill="url(#sky)"/>
+
+  <!-- moon -->
+  <circle cx="1180" cy="210" r="120" fill="url(#moon)" opacity="0.85"/>
+  <circle cx="1180" cy="210" r="58" fill="#F6EFDD" opacity="0.9"/>
+
+  <!-- far ridge -->
+  <path fill="url(#peakFar)" opacity="0.85"
+    d="M0 560 L160 470 L320 520 L470 410 L620 500 L760 430 L900 510 L1060 440 L1240 520 L1420 450 L1600 520 L1600 900 L0 900 Z"/>
+
+  <!-- central snow peak (Fuji-like) -->
+  <path fill="url(#peakMid)"
+    d="M520 620 L760 250 L1000 620 Z"/>
+  <!-- snow cap -->
+  <path fill="#cdd6e6" opacity="0.92"
+    d="M690 360 L760 250 L832 360 L800 348 L778 372 L756 344 L732 372 L712 350 Z"/>
+  <path fill="#e6ecf6" opacity="0.6"
+    d="M712 350 L760 286 L808 350 L788 360 L760 332 L732 360 Z"/>
+
+  <!-- mid ridge -->
+  <path fill="url(#peakMid)" opacity="0.95"
+    d="M0 660 L220 560 L380 640 L560 540 L740 650 L920 560 L1120 650 L1320 560 L1520 650 L1600 610 L1600 900 L0 900 Z"/>
+
+  <!-- near ridge -->
+  <path fill="url(#peakNear)"
+    d="M0 760 L260 690 L460 740 L680 670 L900 745 L1140 685 L1380 745 L1600 700 L1600 900 L0 900 Z"/>
+
+  <!-- mist bands -->
+  <rect x="0" y="640" width="1600" height="60" fill="#aeb8d0" opacity="0.06"/>
+  <rect x="0" y="710" width="1600" height="80" fill="#aeb8d0" opacity="0.05"/>
+</svg>
