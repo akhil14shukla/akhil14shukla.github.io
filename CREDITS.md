@@ -1,21 +1,15 @@
-# Image Credits
+# Credits
 
-All scenery imagery is royalty-free and used in accordance with its license.
-None of it is from Ghost of Tsushima or any other game — those are merely a
-stylistic reference.
+The current scene is **fully real-time 3D** — procedural sky, mountains, grass,
+and wind-borne leaves rendered in-engine. **No photographic or third-party game
+assets are used.**
 
-## `public/scenery/mountain.jpg` — Mt. Fuji backdrop
-- **Title:** *Mount Fuji at sunset, March 2025*
-- **Author:** Romain Guy (San Francisco, USA)
-- **Source:** Wikimedia Commons — https://commons.wikimedia.org/wiki/File:Mount_Fuji_at_sunset,_March_2025.jpg
-- **License:** CC0 1.0 (Public Domain Dedication) — https://creativecommons.org/publicdomain/zero/1.0/
+- `public/scenery/leaf.svg`, `public/scenery/petal.svg` — original silhouettes
+  drawn for this project, used as textures for the wind-borne leaf particles.
+- `public/scenery/snowflake.svg`, `public/scenery/snow-mountain.svg` — original
+  art for the alternate `snow-mountain` scene.
 
-## `public/scenery/field.jpg` — Susuki (silver grass) foreground
-- **Title:** *Hakone sengokuhara susuki1*
-- **Author:** Jungle
-- **Source:** Wikimedia Commons — https://commons.wikimedia.org/wiki/File:Hakone_sengokuhara_susuki1.jpg
-- **License:** CC BY-SA 3.0 — https://creativecommons.org/licenses/by-sa/3.0/
-
-## `public/scenery/leaf.svg`, `public/scenery/petal.svg`
-Original silhouettes drawn for this project (maple leaf, sakura petal) used for
-the wind-borne particles. No third-party assets.
+Wind model is inspired by the Ghost of Tsushima GDC talks (single global wind
+vector + rolling noise gusts); grass technique follows public WebGL instanced-
+grass write-ups (Codrops, et al.). These are references for *technique only* —
+all code and art here are original.

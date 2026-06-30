@@ -24,16 +24,19 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body { height: 100%; }
+html, body { min-height: 100%; }
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--fb);
   line-height: 1.85; /* mincho body needs air */
-  overflow: hidden; /* the stage + panel manage their own space */
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   transition: background 0.6s var(--ease), color 0.6s var(--ease);
 }
+
+/* gives Lenis its scroll range; the canvas + panels are fixed over it */
+.scroll-spacer { height: 720vh; width: 1px; pointer-events: none; }
 a { color: inherit; }
 ::selection { background: var(--gold); color: var(--bg); }
 
@@ -81,18 +84,16 @@ a { color: inherit; }
 }
 
 /* ── Stage + content panel (swaps in place) ───────────────────────── */
-.stage {
-  position: fixed; inset: 0; z-index: 5;
-  display: flex; align-items: center; justify-content: flex-start;
-  padding: 12vh 6vw 17vh;
-  pointer-events: none;
-}
+.stage { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
 .panel {
-  pointer-events: auto;
-  width: 100%; max-width: 880px;
-  max-height: 76vh; overflow-y: auto;
-  scrollbar-width: thin;
+  position: fixed; top: 0; bottom: 0; left: 0;
+  width: min(860px, 94vw);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 12vh 0 16vh 6vw;
+  pointer-events: none;             /* canvas keeps receiving cursor moves */
+  transition: opacity 0.45s var(--ease);
 }
+.panel a, .panel button, .panel .card { pointer-events: auto; }
 .panel.is-home {
   max-width: 820px;
   padding: 2rem 2.4rem;
@@ -200,6 +201,14 @@ a { color: inherit; }
   font-family: var(--fm); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text); opacity: 0.55; margin-top: 2rem;
 }
+.home.cta .verdict-cta {
+  display: inline-block; align-self: flex-start; margin: 1.4rem 0 0.4rem;
+  font-family: var(--fm); font-size: 0.82rem; letter-spacing: 0.04em;
+  border: 1px solid var(--gold); color: var(--bright);
+  padding: 0.85rem 1.7rem; border-radius: 40px; text-decoration: none;
+  transition: all 0.35s var(--ease); backdrop-filter: blur(6px);
+}
+.home.cta .verdict-cta:hover { background: var(--gold); color: var(--bg); transform: translateY(-2px); }
 
 /* ── Cards ───────────────────────────────────────────────────────── */
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.1rem; }

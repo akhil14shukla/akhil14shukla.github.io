@@ -3,24 +3,32 @@
 An interactive portfolio for **Akhil Shukla** — Data Scientist & AI/ML Engineer.
 Hosted at [https://akhil14shukla.github.io/](https://akhil14shukla.github.io/).
 
-A cinematic Japanese landscape — Mt. Fuji at sunset over a windswept **susuki
-field**, with maple leaves streaming on a single **guiding wind** (a
-Ghost-of-Tsushima-style wind model). The leaves are the "nodes" of a neural
-field: **follow a current** (pick a topic) and the wind carries its leaves into a
-focal vortex while the content swaps in place. A top-right **activation probe**
-tracks the forward pass and how much of the field you've explored.
+A **fully real-time 3D** Japanese field at dusk that you **fly through on
+scroll**: procedural sky + mountains, an **instanced GPU grass** field, and
+maple leaves carried on a single **guiding wind**. Scrolling scrubs a cinematic
+camera from high above the field down into the grass and through each topic
+"station." Everything reacts to your cursor — you part the grass and scatter the
+leaves.
 
-> Nothing here runs or trains a model — the neural framing is a **visual
-> metaphor** (GPU particles + shaders). No inference, no weights, no API.
+> Nothing here runs or trains a model — it's a real-time WebGL world. No photos,
+> no game assets; sky, mountains, grass and leaves are all generated in-engine.
 
-## Wind (the interactive bit)
+## Wind + interaction
 
 Modelled on Ghost of Tsushima's "guiding wind": a single global wind vector whose
 magnitude is modulated by two octaves of noise, so **gusts roll across the
-field**. The grass photo is UV-displaced by the wind, the leaves are advected
-along it, the **pointer parts** the leaves, **clicks fire gust rings**, and
-selecting a topic sends a guiding gust toward it. All shared via one wind field
-(`src/three/wind.js`).
+field**. Tens of thousands of instanced grass blades bend toward the wind in the
+vertex shader; leaf billboards drift along it. A **world-space cursor** (raycast
+onto the ground) **parts the grass** and **repels/swirls the leaves**; clicks
+fire **gust rings**; nav chips send a guiding gust. One shared field
+(`src/three/wind.js`) drives every layer.
+
+## The journey (scroll)
+
+A tall scroll spacer feeds Lenis; `src/three/CameraJourney.jsx` flies a damped
+CatmullRom camera path; `src/components/Stations.jsx` reveals each topic at its
+slice of scroll progress. Desktop-first, with a `PerformanceMonitor` that scales
+grass/leaf counts and depth-of-field down on weaker GPUs.
 
 ## Sections / topics
 
