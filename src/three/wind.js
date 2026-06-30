@@ -36,17 +36,22 @@ export function setPointer(wx, wy) {
 }
 
 // Call once per frame before any layer reads the field.
+// GoT model: a single global wind vector (mostly constant direction) whose
+// magnitude is modulated by time-varying noise — two octaves, so big gusts roll
+// across the field with finer detail layered on top.
 export function updateWind(elapsed) {
   wind.time = elapsed;
-  // base direction drifts slowly (mostly horizontal), via low-freq noise
-  const a = noise(elapsed * 0.02, 0.0) * Math.PI;
+  // base direction drifts slowly (mostly horizontal, blowing "from the west")
+  const a = noise(elapsed * 0.015, 0.0) * 0.6; // small angular wander
   const tx = Math.cos(a);
-  const ty = Math.sin(a) * 0.4;
+  const ty = Math.sin(a) * 0.35 - 0.12; // slight downward bias
   wind.dirX += (tx - wind.dirX) * 0.02;
   wind.dirY += (ty - wind.dirY) * 0.02;
-  // gusty strength + a kick from how fast the pointer is moving
+  // two-octave rolling gusts + a kick from pointer speed
+  const gustBig = 0.5 + 0.5 * noise(elapsed * 0.12, 5.0);
+  const gustSmall = 0.5 + 0.5 * noise(elapsed * 0.45, 20.0);
   const speed = Math.min(1.5, Math.hypot(wind.pvX, wind.pvY) * 0.6);
-  wind.strength = 0.5 + 0.5 * (0.5 + 0.5 * noise(elapsed * 0.15, 5.0)) + speed;
+  wind.strength = 0.45 + gustBig * 0.7 + gustSmall * 0.25 + speed;
   // drop expired gusts + bleed off pointer velocity
   wind.gusts = wind.gusts.filter((g) => elapsed - g.t0 < GUST_LIFE);
   wind.pvX *= 0.9;

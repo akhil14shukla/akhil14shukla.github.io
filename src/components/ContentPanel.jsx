@@ -16,7 +16,7 @@ function Home() {
   return (
     <div className="home">
       <motion.div className="kicker" variants={variants}>
-        snowfall · a neural field of work
+        the guiding wind · a field of work
       </motion.div>
       <motion.h1 variants={variants}>{PROFILE.name}.</motion.h1>
       <motion.div className="role" variants={variants}>{PROFILE.role}</motion.div>
@@ -27,7 +27,7 @@ function Home() {
         ))}
       </motion.div>
       <motion.div className="hint" variants={variants}>
-        pick a current below — the snow will attend to it ↓
+        follow a current below — the wind will carry you to it ↓
       </motion.div>
     </div>
   );

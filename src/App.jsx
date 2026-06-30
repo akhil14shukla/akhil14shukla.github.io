@@ -24,7 +24,7 @@ export default function App() {
 
   // dim the scene more when reading a topic, keep it vivid at home
   useEffect(() => {
-    document.documentElement.style.setProperty('--scrim', selectedTopic ? '0.6' : '0.16');
+    document.documentElement.style.setProperty('--scrim', selectedTopic ? '0.28' : '0.0');
   }, [selectedTopic]);
 
   const backdrop = getScene(sceneId).backdrop;

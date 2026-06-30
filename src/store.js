@@ -11,7 +11,7 @@ const initialTheme =
 export const useStore = create((set, get) => ({
   // ── theme + scene (swap-able) ──
   theme: initialTheme,
-  sceneId: 'snow-mountain',
+  sceneId: 'fuji-field',
   setTheme: (id) => {
     if (typeof localStorage !== 'undefined') localStorage.setItem('theme', id);
     applyTheme(id);

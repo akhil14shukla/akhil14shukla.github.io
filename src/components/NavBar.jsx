@@ -22,7 +22,7 @@ export default function NavBar() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <span className="navbar-label">query&nbsp;the&nbsp;snow</span>
+      <span className="navbar-label">follow&nbsp;the&nbsp;wind</span>
       {ITEMS.map((it) => (
         <button
           key={it.label}
