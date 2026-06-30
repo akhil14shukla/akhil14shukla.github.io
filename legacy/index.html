@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Akhil Shukla - Data Scientist & Kaggle Expert Portfolio">
+    <title>Akhil Shukla | Data Scientist</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Outfit:wght@500;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo">AS<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+            </ul>
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <canvas class="network-canvas" id="networkCanvas"></canvas>
+            <div class="hero-content hidden-fade-up">
+                <p class="greeting">Hi, my name is</p>
+                <h1 class="name">Akhil Shukla.</h1>
+                <div class="typewriter-container">
+                    <h2 class="title typewriter">I build intelligent data solutions.</h2>
+                </div>
+                <p class="summary">
+                    Data Scientist III at Walmart Global Tech. Kaggle Expert & IIT Kanpur Alumnus.<br>
+                    Specializing in advanced analytics, agentic AI frameworks, and end-to-end forecasting pipelines.
+                </p>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/akhil14shukla" target="_blank" rel="noopener noreferrer"><i
+                            class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/akhil14shukla" target="_blank" rel="noopener noreferrer"><i
+                            class="fab fa-github"></i></a>
+                    <a href="https://kaggle.com/akhil14shukla" target="_blank" rel="noopener noreferrer"><i
+                            class="fab fa-kaggle"></i></a>
+                </div>
+            </div>
+            <div class="hero-image hidden-zoom-in">
+                <div class="image-wrapper">
+                    <!-- Profile Picture Space -->
+                    <img src="assets/images/profile.jpg" alt="Akhil Shukla" id="profile-img"
+                        onerror="this.onerror=null; this.src='https://via.placeholder.com/400x400/1e293b/8b5cf6?text=AS';">
+                    <div class="image-backdrop"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="experience section" id="experience">
+            <!-- Parallax Background Text -->
+            <div class="parallax-bg-text" id="parallax-text">EXPERIENCE</div>
+
+            <h2 class="section-title hidden-fade-up">Where I've Worked</h2>
+
+            <div class="timeline">
+                <div class="timeline-item hidden-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
+                        <h3>Data Scientist III <span>@ Walmart Global Tech</span></h3>
+                        <p class="date">Aug 2024 - Present</p>
+                        <ul class="duties">
+                            <li>Led a Proof-of-Concept (PoC) to advance the firm’s insights generation for user-specific
+                                personalization.</li>
+                            <li>Engineered an autonomous Agent framework using <strong>DSPy</strong> to deliver custom
+                                insights by interpreting complex user-prompts.</li>
+                            <li>Built agent tools for RAG (business context), data extraction, and web-search
+                                capabilities.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item hidden-fade-up">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
+                        <h3>Analyst II <span>@ Walmart Global Tech</span></h3>
+                        <p class="date">Jun 2022 - Aug 2024</p>
+                        <ul class="duties">
+                            <li>Developed text-to-SQL service using <strong>spaCy</strong> and Reflexion prompting to
+                                ensure SQL logical correctness.</li>
+                            <li>Implemented LLM models for multi-step summarization of financial data.</li>
+                            <li>Engineered an automated MacroFinancial forecasting workflow achieving 2% MAPE.</li>
+                            <li>Recognized as Associate of the Quarter (Bravo Award) and co-recipient of the Team Award
+                                for Delivery Excellence.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="projects section" id="projects">
+            <h2 class="section-title hidden-fade-up">Selected Projects</h2>
+            <div class="project-grid">
+
+                <div class="project-card hidden-fade-up" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
+                    <div class="project-header">
+                        <i class="fas fa-folder-open icon"></i>
+                        <div class="project-links">
+                            <a href="https://github.com/akhil14shukla/pps-python" target="_blank"><i
+                                    class="fab fa-github"></i></a>
+                            <a href="https://pypi.org/project/pps-python/" target="_blank"><i
+                                    class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <h3>pps-python</h3>
+                    <p class="project-desc">Python library for calculating Predictive Power Score (PPS), a powerful
+                        alternative to correlation that finds both linear and non-linear patterns. Available on PyPI.
+                    </p>
+                    <ul class="tech-list">
+                        <li>Python</li>
+                        <li>Pandas</li>
+                        <li>Scikit-Learn</li>
+                    </ul>
+                </div>
+
+                <div class="project-card hidden-fade-up" style="transition-delay: 0.1s;" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
+                    <div class="project-header">
+                        <i class="fas fa-chart-line icon"></i>
+                    </div>
+                    <h3>Cryptocurrency Forecasting</h3>
+                    <p class="project-desc">Scraped Yahoo Finance data, applied differencing for stationarity, and
+                        trained an LSTM neural network using TensorFlow. Documented a publishable report.</p>
+                    <ul class="tech-list">
+                        <li>Python</li>
+                        <li>TensorFlow</li>
+                        <li>LSTM</li>
+                    </ul>
+                </div>
+
+                <div class="project-card hidden-fade-up" style="transition-delay: 0.2s;" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.1">
+                    <div class="project-header">
+                        <i class="fas fa-trophy icon"></i>
+                        <div class="project-links">
+                            <a href="https://kaggle.com/akhil14shukla" target="_blank"><i class="fab fa-kaggle"></i></a>
+                        </div>
+                    </div>
+                    <h3>Kaggle Competitions</h3>
+                    <p class="project-desc">Ranked as a Kaggle Expert (top 10% globally) and Specialist on Codeforces
+                        (max rating 1429). Actively participated in data science problems covering predictive modeling.
+                    </p>
+                    <ul class="tech-list">
+                        <li>Machine Learning</li>
+                        <li>Algorithms</li>
+                        <li>Data Mining</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="skills section" id="skills">
+            <h2 class="section-title hidden-fade-up">Technical Arsenal</h2>
+            <div class="skills-container hidden-fade-up">
+
+                <div class="skill-category">
+                    <h3>Languages</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">SQL</span>
+                        <span class="tag">C/C++</span>
+                        <span class="tag">MATLAB</span>
+                        <span class="tag">LaTeX</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Libraries & Frameworks</h3>
+                    <div class="skill-tags">
+                        <span class="tag">PySpark</span>
+                        <span class="tag">DSPy</span>
+                        <span class="tag">TensorFlow</span>
+                        <span class="tag">spaCy</span>
+                        <span class="tag">Transformers</span>
+                        <span class="tag">Pandas</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Cloud & Tools</h3>
+                    <div class="skill-tags">
+                        <span class="tag">Git</span>
+                        <span class="tag">GCP</span>
+                        <span class="tag">Airflow</span>
+                        <span class="tag">Linux</span>
+                        <span class="tag">Photoshop</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- About / Education -->
+        <section class="education section" id="about">
+            <h2 class="section-title hidden-fade-up">Education</h2>
+            <div class="edu-card card hidden-fade-up" data-tilt data-tilt-max="3" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.05">
+                <div class="edu-header">
+                    <h3>Indian Institute of Technology Kanpur</h3>
+                    <span class="date">Class of 2022</span>
+                </div>
+                <p class="degree">B.Tech in Chemical Engineering</p>
+                <p class="minor">Minor in Industrial & Management Engineering</p>
+                <br>
+                <p>Positions of Responsibility:</p>
+                <ul class="duties">
+                    <li><strong>Manager, Design | Antaragni’19</strong> - Led a team of 15 graphic designers and
+                        revamped the UI for the official mobile app leading to 30% YoY increase.</li>
+                    <li><strong>Academic Mentor | Counselling Service</strong> - Mentored 300+ students for the course
+                        PHY103: Electrodynamics.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Easter Egg Data Visualization -->
+        <section class="easter-egg section">
+            <div class="easter-content hidden-fade-up">
+                <h3>Predictive Distribution Pattern</h3>
+                <p>Hover over the chart to interact with the underlying function simulation.</p>
+                <div class="canvas-container">
+                    <canvas id="easterEggCanvas"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>Designed & Built by Akhil Shukla</p>
+            <div class="social-links-footer">
+                <a href="mailto:akhil14shukla@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://linkedin.com/in/akhil14shukla" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/akhil14shukla" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+            <p class="small-text">IIT Kanpur Alumnus &bull; Kaggle Expert</p>
+        </div>
+    </footer>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
