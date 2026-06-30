@@ -34,7 +34,7 @@ const fragment = /* glsl */ `
     col *= vec3(1.08, 0.96, 0.74);
     col = pow(col, vec3(0.95));
 
-    float aTop = smoothstep(1.0, 0.68, vUv.y);            // fade into the sky
+    float aTop = smoothstep(0.92, 0.5, vUv.y);            // fade the top into the scene
     float aSide = smoothstep(0.0, 0.05, vUv.x) * smoothstep(1.0, 0.95, vUv.x);
     float alpha = aTop * aSide;
     if (alpha < 0.01) discard;
@@ -60,8 +60,8 @@ export default function FieldPlane() {
   });
 
   return (
-    <mesh position={[0, -2.2, 9]} renderOrder={1}>
-      <planeGeometry args={[22, 7, 1, 1]} />
+    <mesh position={[0, -3.9, 9]} renderOrder={1}>
+      <planeGeometry args={[22, 6, 1, 1]} />
       <shaderMaterial
         ref={matRef}
         uniforms={uniforms}

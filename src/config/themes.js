@@ -11,8 +11,8 @@ export const THEMES = [
     dataTheme: 'dark',
     sceneId: 'snow-mountain',
     fonts: {
-      display: "'Shippori Mincho', serif",
-      body: "'Zen Kaku Gothic New', sans-serif",
+      display: "'Yuji Syuku', serif",
+      body: "'Shippori Mincho', serif",
       mono: "'Fira Code', monospace",
     },
     vars: {
@@ -37,8 +37,8 @@ export const THEMES = [
     dataTheme: 'light',
     sceneId: 'snow-mountain',
     fonts: {
-      display: "'Shippori Mincho', serif",
-      body: "'Zen Kaku Gothic New', sans-serif",
+      display: "'Yuji Syuku', serif",
+      body: "'Shippori Mincho', serif",
       mono: "'Fira Code', monospace",
     },
     vars: {

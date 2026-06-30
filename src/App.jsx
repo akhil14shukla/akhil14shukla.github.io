@@ -41,6 +41,7 @@ export default function App() {
         <Scene />
       </Suspense>
 
+      <div className="grade" />
       <div className="content-scrim" />
 
       <button className="toggle" onClick={cycleTheme} aria-label="Cycle theme">
