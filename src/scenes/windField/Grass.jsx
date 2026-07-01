@@ -4,10 +4,12 @@ import * as THREE from 'three';
 import { wind } from '../../three/wind';
 import { PALETTE } from './palette';
 
-// Instanced GPU grass — one procedural blade geometry drawn N times, each blade
-// bent by the shared wind (gusty sine + lean toward the wind vector) and parted
-// by the world-space cursor. Tip→base gradient, base AO, distance fog.
-const SEG = 5;
+// Instanced GPU grass — one procedural blade geometry drawn N times. Each blade
+// arcs forward (quadratic curve), bends with the shared wind, is parted by the
+// world-space cursor, and is lit by the sun with a backlit tip glint (susuki at
+// dusk). Blades grow in clumps; colour varies green↔dry-gold. Tapered, feathered
+// tips; distance fog.
+const SEG = 6;
 
 function bladeGeometry() {
   const pos = [];
@@ -34,7 +36,9 @@ const vertexShader = /* glsl */ `
   attribute float iRot;
   attribute float iScale;
   attribute float iTint;
+  attribute float iGreen;
   attribute float iPhase;
+  attribute float iLean;
 
   uniform float uTime;
   uniform vec2 uWindDir;
@@ -47,33 +51,44 @@ const vertexShader = /* glsl */ `
 
   varying float vY;
   varying float vTint;
+  varying float vGreen;
   varying float vFog;
+  varying vec3 vNormal;
 
   mat2 rot(float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c); }
 
   void main(){
     vY = uv.y;
     vTint = iTint;
+    vGreen = iGreen;
+    float t = uv.y;
     float h = iScale;
-    float w = uWidth * (1.0 - uv.y * 0.72);
-    vec3 p = vec3((uv.x - 0.5) * w, uv.y * h, 0.0);
+    // tapered, feathered blade — widest at base, point at the tip
+    float w = uWidth * (1.0 - t * t * 0.92);
 
-    // facing
-    vec2 xz = rot(iRot) * p.xz;
-    vec3 world = iOffset + vec3(xz.x, p.y, xz.y);
+    // local blade in its own facing frame
+    vec3 local = vec3((uv.x - 0.5) * w, t * h, 0.0);
+    vec2 xz = rot(iRot) * local.xz;
+    vec3 world = iOffset + vec3(xz.x, local.y, xz.y);
 
-    // wind bend toward the wind vector, stronger toward the tip + gusty sway
+    // forward arc + gusty wind lean, quadratic in height (stiff base, loose tip)
     float sway = sin(uTime * 1.6 + iPhase + iOffset.x * 0.25 + iOffset.z * 0.2);
-    float bend = (uWindStr * 0.5 + 0.22) * (0.6 + 0.4 * sway) * uv.y * uv.y;
+    float bend = (iLean * 0.5) + (uWindStr * 0.5 + 0.18) * (0.6 + 0.4 * sway);
     vec2 wd = normalize(uWindDir + 0.0001);
-    world.xz += wd * bend * h;
+    float arc = bend * h * t * t;
+    world.xz += wd * arc;
 
-    // cursor parts the grass: push tip away + press down within a radius
+    // analytic normal from the curved blade surface (height tangent × width tangent)
+    vec3 Th = normalize(vec3(wd.x * bend * h * 2.0 * t, h, wd.y * bend * h * 2.0 * t));
+    vec3 Tw = vec3(cos(iRot), 0.0, sin(iRot));
+    vNormal = normalize(cross(Th, Tw));
+
+    // cursor parts the grass: push the tip away + press down within a radius
     vec2 toC = world.xz - uCursor.xz;
     float cd = length(toC);
     float infl = smoothstep(3.4, 0.0, cd) * uCursorAct;
-    world.xz += normalize(toC + 0.0001) * infl * 1.3 * uv.y;
-    world.y -= infl * 0.55 * uv.y;
+    world.xz += normalize(toC + 0.0001) * infl * 1.3 * t;
+    world.y -= infl * 0.55 * t;
 
     vec4 mv = viewMatrix * vec4(world, 1.0);
     vFog = smoothstep(uFogNear, uFogFar, length(mv.xyz));
@@ -85,15 +100,37 @@ const fragmentShader = /* glsl */ `
   uniform vec3 uBase;
   uniform vec3 uTip;
   uniform vec3 uDry;
+  uniform vec3 uGreen;
   uniform vec3 uFog;
+  uniform vec3 uSunDir;
+  uniform vec3 uSunCol;
   varying float vY;
   varying float vTint;
+  varying float vGreen;
   varying float vFog;
+  varying vec3 vNormal;
+
   void main(){
+    vec3 nrm = normalize(vNormal);
+    if (!gl_FrontFacing) nrm = -nrm;
+
+    // tip colour: gold↔dry per blade, shifted toward green for some blades
     vec3 tip = mix(uTip, uDry, vTint);
-    vec3 g = mix(uBase, tip, vY);
-    g *= 0.5 + 0.5 * vY;              // base ambient occlusion
-    vec3 col = mix(g, uFog, vFog);
+    tip = mix(tip, uGreen, vGreen);
+    vec3 base = mix(uBase, uGreen * 0.6, vGreen);
+    vec3 g = mix(base, tip, vY);
+    g *= 0.5 + 0.5 * vY;                       // base ambient occlusion
+
+    // sun lighting + sky ambient
+    float diff = clamp(dot(nrm, uSunDir), 0.0, 1.0);
+    float ambient = 0.4 + 0.22 * vY;
+    vec3 lit = g * (ambient + diff * 0.7 * uSunCol);
+
+    // backlit translucency — tips glow when the sun is behind the blade (susuki)
+    float back = clamp(dot(-nrm, uSunDir), 0.0, 1.0);
+    lit += tip * uSunCol * back * vY * vY * 0.7;
+
+    vec3 col = mix(lit, uFog, vFog);
     gl_FragColor = vec4(col, 1.0);
   }
 `;
@@ -112,24 +149,46 @@ export default function Grass({ count = 60000, radius = 72 }) {
     const rot = new Float32Array(count);
     const scl = new Float32Array(count);
     const tnt = new Float32Array(count);
+    const grn = new Float32Array(count);
     const phs = new Float32Array(count);
-    for (let i = 0; i < count; i++) {
-      // scatter on a disc, denser toward the centre (the camera path)
+    const len = new Float32Array(count);
+
+    // grow in clumps: a set of tuft centres, blades jittered around each
+    const clumpCount = Math.max(1, Math.floor(count / 7));
+    const cx = new Float32Array(clumpCount);
+    const cz = new Float32Array(clumpCount);
+    for (let c = 0; c < clumpCount; c++) {
       const a = Math.random() * Math.PI * 2;
-      const r = Math.pow(Math.random(), 0.7) * radius;
-      off[i * 3] = Math.cos(a) * r;
+      const r = Math.pow(Math.random(), 0.7) * radius;  // denser toward centre
+      cx[c] = Math.cos(a) * r;
+      cz[c] = Math.sin(a) * r;
+    }
+
+    for (let i = 0; i < count; i++) {
+      const c = i % clumpCount;
+      const jr = Math.pow(Math.random(), 0.5) * 0.7;     // tuft spread
+      const ja = Math.random() * Math.PI * 2;
+      const x = cx[c] + Math.cos(ja) * jr;
+      const z = cz[c] + Math.sin(ja) * jr;
+      off[i * 3] = x;
       off[i * 3 + 1] = 0;
-      off[i * 3 + 2] = Math.sin(a) * r;
+      off[i * 3 + 2] = z;
+      const distN = Math.min(1, Math.hypot(x, z) / radius);
       rot[i] = Math.random() * Math.PI;
-      scl[i] = 0.7 + Math.random() * 1.1;
+      // hero blades a touch taller near the camera path (centre), tuft centre tall
+      scl[i] = (0.7 + Math.random() * 1.0) * (1.0 + (1.0 - distN) * 0.35) * (1.0 - jr * 0.3);
       tnt[i] = Math.random();
+      grn[i] = Math.random() < 0.28 ? 0.5 + Math.random() * 0.5 : 0.0;
       phs[i] = Math.random() * Math.PI * 2;
+      len[i] = 0.1 + Math.random() * 0.5;                // resting lean
     }
     g.setAttribute('iOffset', new THREE.InstancedBufferAttribute(off, 3));
     g.setAttribute('iRot', new THREE.InstancedBufferAttribute(rot, 1));
     g.setAttribute('iScale', new THREE.InstancedBufferAttribute(scl, 1));
     g.setAttribute('iTint', new THREE.InstancedBufferAttribute(tnt, 1));
+    g.setAttribute('iGreen', new THREE.InstancedBufferAttribute(grn, 1));
     g.setAttribute('iPhase', new THREE.InstancedBufferAttribute(phs, 1));
+    g.setAttribute('iLean', new THREE.InstancedBufferAttribute(len, 1));
     g.instanceCount = count;
     return g;
   }, [count, radius]);
@@ -141,13 +200,16 @@ export default function Grass({ count = 60000, radius = 72 }) {
       uWindStr: { value: 0.6 },
       uCursor: { value: new THREE.Vector3() },
       uCursorAct: { value: 0 },
-      uWidth: { value: 0.09 },
+      uWidth: { value: 0.1 },
       uFogNear: { value: 24 },
       uFogFar: { value: 120 },
       uBase: { value: PALETTE.grassBase },
       uTip: { value: PALETTE.grassTip },
       uDry: { value: PALETTE.grassDry },
+      uGreen: { value: PALETTE.grassGreen },
       uFog: { value: PALETTE.fog },
+      uSunDir: { value: PALETTE.sunDir },
+      uSunCol: { value: PALETTE.sun },
     }),
     []
   );
