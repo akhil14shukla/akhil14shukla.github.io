@@ -120,13 +120,17 @@ export default function Leaves({ count = 1400 }) {
     const color = new Float32Array(count * 3);
     const col = new THREE.Color();
     const autumn = ['#c0392b', '#d2622c', '#e0902e', '#a8402f', '#bf7a30'];
+    const sakura = ['#f3c6d6', '#f6d7e2', '#eab3c6'];
     for (let i = 0; i < count; i++) {
       home[i * 3] = (Math.random() * 2 - 1) * 55;
       home[i * 3 + 1] = Math.random() * 13;
       home[i * 3 + 2] = (Math.random() * 2 - 1) * 55;
       seed[i] = Math.random();
-      scale[i] = 0.28 + Math.random() * 0.4;
-      col.set(autumn[(Math.random() * autumn.length) | 0]);
+      // ~22% drifting sakura petals — smaller — among the maple leaves
+      const isPetal = Math.random() < 0.22;
+      scale[i] = isPetal ? 0.16 + Math.random() * 0.18 : 0.28 + Math.random() * 0.4;
+      const pal = isPetal ? sakura : autumn;
+      col.set(pal[(Math.random() * pal.length) | 0]);
       color[i * 3] = col.r; color[i * 3 + 1] = col.g; color[i * 3 + 2] = col.b;
     }
     g.setAttribute('iHome', new THREE.InstancedBufferAttribute(home, 3));
